@@ -24,4 +24,4 @@ jobs:
  
       # Étape 3 : Build et tests Maven
       - name: Build and test with Maven
-        run: mvn clean verify --file ./simple-api/pom.xm
+        run: mvn clean verify --file ./simple-api/pom.xml
