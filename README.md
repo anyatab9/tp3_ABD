@@ -1,68 +1,3 @@
-# devops-livecoding
-Ce projet illustre une implémentation DevOps basée sur les technologies suivantes :
-
-Testcontainers pour le testing des bases de données en environnement conteneurisé.
-GitHub Actions pour l'intégration continue (CI).
-Ansible pour le déploiement automatisé des applications avec Docker.
-
-2. Documentation du Workflow GitHub Actions
-📄 Fichier : main.yml
-Ce workflow CI exécute des vérifications automatiques à chaque modification du code.
-⚙️ Conditions de Déclenchement
-Le workflow s'exécute lorsque :
-
-Un push est effectué sur les branches main ou dev.
-Une Pull Request est ouverte.
-
-🧪 Job Principal : test-backend
-Environnement : ubuntu-22.04
-Objectif : Construction et tests du projet.
-Étapes Clés :
-Récupération du Code
-Utilisation de actions/checkout@v2.5.0 pour cloner le repository.
-
-Configuration de Java (JDK 17)
-Configuration de l'environnement Java avec actions/setup-java@v3 (Amazon Corretto).
-
-Compilation et Tests
-Exécution de Maven : mvn clean verify
-
-Ce processus garantit la validation automatique du code avant chaque fusion, assurant la stabilité des branches main et dev.
-
-3. Pourquoi Pousser des Images Docker ?
-La centralisation des images Docker dans un registre permet :
-
-La cohérence des déploiements sur différents environnements.
-La gestion des versions et le rollback facilité en cas d'erreur.
-Une intégration simplifiée dans les workflows CI/CD pour des builds et déploiements automatisés.
-Dans une architecture microservices, cela facilite l'indépendance des composants pour le scaling et les mises à jour.
-
-4. Configuration Ansible
-📁 Structure du Projet
-Le répertoire Ansible est organisé comme suit : 
-devops-livecoding/
-└── ansible/
-    └── inventories/
-        └── setup.yml
-
-🗂 Fichier d'Inventaire : setup.yml
-Ce fichier définit :
-
-Les hôtes (ex : environnements de production).
-Les variables globales telles que l'utilisateur SSH et la clé privée.
-Exemple de Configuration :
-
-all:
-  vars:
-    ansible_user: admin
-    ansible_ssh_private_key_file: /chemin/vers/cle_privee
-  children:
-    prod:
-      hosts:
-        192.168.1.10:
-
-
-Voici une reformulation complète de ton README pour ton projet devops-livecoding, structurée pour plus de clarté et d'impact.
 
 devops-livecoding
 Description du Projet
@@ -256,5 +191,3 @@ Lance un serveur HTTP pour exposer l'application.
 🚀 Exécution du Déploiement
 Pour exécuter le playbook :
 ansible-playbook -i inventories/setup.yml playbook.yml
-#   t p 3 _ A B D  
- 
