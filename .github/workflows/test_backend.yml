@@ -68,4 +68,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub token for authentication
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # SonarQube token for analysis
         # Run the Maven command to clean, build, and run tests, then perform SonarQube analysis
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=anyatab9_tp2_ABD
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=wandrilledb_devops-livecoding

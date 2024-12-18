@@ -1,27 +1,65 @@
-name: CI devops 2024
- 
+name: CI devops 2024 - Build and Push Docker Images
+
+# Workflow trigger
 on:
-  push:
-    branches:
-      - main
-      - develop
-  pull_request:
- 
+  workflow_run:
+    # This workflow is triggered after the completion of the "CI devops 2024 - Test Backend" workflow
+    workflows: ["CI devops 2024 - Test Backend"]
+    # The workflow is triggered when the above workflow finishes successfully (types: completed)
+    types:
+      - completed
+
 jobs:
-  test-backend:
+  # Definition of the 'build-and-push-docker-image' job
+  build-and-push-docker-image:
+    # Specifies the environment to run the job on (Ubuntu 22.04)
     runs-on: ubuntu-22.04
+    # No dependency here, as this workflow is triggered after the completion of the first workflow.
+
     steps:
-      # Étape 1 : Checkout du code source
+      # Step 1: Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v2.5.0
- 
-      # Étape 2 : Configuration de JDK 17
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        # Use the 'checkout' action to retrieve the code from the repository
+        uses: actions/checkout@v2
+
+      # Step 2: DockerHub Login
+      - name: Login to DockerHub
+        # Login to DockerHub using credentials stored in GitHub Secrets
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 3: Build and Push the Backend Docker Image
+      - name: Build image and push backend
+        # Use the 'docker/build-push-action' to build and push the backend Docker image
+        uses: docker/build-push-action@v3
         with:
-          java-version: '17'
-          distribution: 'adopt'
- 
-      # Étape 3 : Build et tests Maven
-      - name: Build and test with Maven
-        run: mvn clean verify --file ./simple-api/pom.xml
+          # Set the context (path to the Dockerfile and necessary files for the backend)
+          context: ./simple-api
+          # Tag the image with the DockerHub username and the 'latest' tag
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
+          # Push the image to DockerHub after building it
+          push: true
+
+      # Step 4: Build and Push the Database Docker Image
+      - name: Build image and push database
+        # Use the 'docker/build-push-action' to build and push the database Docker image
+        uses: docker/build-push-action@v3
+        with:
+          # Set the context (path to the Dockerfile and necessary files for the database)
+          context: ./database
+          # Tag the image with the DockerHub username and the 'latest' tag
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
+          # Push the image to DockerHub after building it
+          push: true
+
+      # Step 5: Build and Push the HTTP Server Docker Image
+      - name: Build image and push httpd
+        # Use the 'docker/build-push-action' to build and push the HTTP server Docker image
+        uses: docker/build-push-action@v3
+        with:
+          # Set the context (path to the Dockerfile and necessary files for the HTTP server)
+          context: ./http-server
+          # Tag the image with the DockerHub username and the 'latest' tag
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
+          # Push the image to DockerHub after building it
+          push: truerm -rf tp3_ABD/
+
